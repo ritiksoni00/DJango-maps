@@ -1,0 +1,263 @@
+{% load static %}  
+{% csrf_token %} 
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>django_map</title>
+    <link rel="stylesheet" href="{% static 'first.css'%}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+  </head>
+  <body>
+
+
+<div id='map' >
+  <!-- sidbar -->
+  <div id="sidebar">
+    <div class="slideshow-container">
+      <div class="mySlides fade">
+        <div id="im1" class="ok"></div>
+      </div>  
+      <div class="mySlides fade">
+        <div id="im2" class="ok"></div>
+      </div> 
+      <div class="mySlides fade">
+        <div id="im3" class="ok"></div>
+      </div> 
+      <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+      <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+    <div id="place_name"></div>
+    <div style="color: aliceblue;" id="info_about_place"></div>
+
+  </div>
+
+</div>
+    
+  </body>
+
+
+<!-- JS -->
+  <script>
+  mapboxgl.accessToken = 'pk.eyJ1IjoicnRrc28iLCJhIjoiY2txajR6YWhiMDlucTJ1cHNya3E1eXdvdiJ9.UzadVtSsmXV8iJ_zTJ0nyw';
+var map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/mapbox/streets-v11',
+center: [2.350850, 48.856892],
+zoom: 2
+});
+
+
+
+
+
+
+
+map.addControl(new mapboxgl.GeolocateControl({
+  positionOptions: {
+  enableHighAccuracy: true
+  },
+  trackUserLocation: true
+  }));
+
+  var nav = new mapboxgl.NavigationControl();
+map.addControl(nav, 'bottom-left');
+
+
+
+// var ram=document.getElementById('myVar').value;
+
+
+var delhi = new mapboxgl.Marker()
+.setLngLat([77.1025,28.7041])
+.addTo(map);
+var aus = new mapboxgl.Marker()
+.setLngLat([134.215029, -23.885838])
+.addTo(map);
+var paris = new mapboxgl.Marker()
+.setLngLat([2.350850, 48.856892])
+.addTo(map);
+var us = new mapboxgl.Marker()
+.setLngLat([-95.712891, 37.090240])
+.addTo(map);
+var brazil = new mapboxgl.Marker()
+.setLngLat([-51.925282, -14.235004])
+.addTo(map);
+// var marker = new mapboxgl.Marker()
+// .setLngLat([-77.038659, 38.931567])
+// .addTo(map);
+// var marker = new mapboxgl.Marker()
+// .setLngLat([-77.111561, 38.882342])
+// .addTo(map);
+// var marker = new mapboxgl.Marker()
+// .setLngLat([-77.003168, 38.894651])
+// .addTo(map);
+// var marker = new mapboxgl.Marker()
+// .setLngLat([-77.1876993, 38.8655595])
+// .addTo(map);
+
+
+// var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+
+// function csrfSafeMethod(method) {
+//     // these HTTP methods do not require CSRF protection
+//     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+// }
+// // set csrf header
+// $.ajaxSetup({
+//     beforeSend: function(xhr, settings) {
+//         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+//             xhr.setRequestHeader("X-CSRFToken", csrftoken);
+//         }
+//     }
+// });
+
+
+    
+
+
+// sidebar
+const sidebar = document.getElementById('sidebar');
+delhi.getElement().onclick = function(){
+  sidebar.classList.toggle('active');
+
+  
+  $.ajax({
+          url: "{% url 'default' %}",
+          method: 'post',
+          beforeSend: function(xhr){xhr.setRequestHeader('X-CSRFToken', $("input[name='csrfmiddlewaretoken']").val());},
+          data: {
+            "place" : 'Delhi'
+          },
+          success: function(response){
+            var obj = JSON.parse(response);
+            console.log(obj)
+            for(var i= 1;i<4;i++){
+            $('#im'+[i]).html('<img src=' + obj[i]['fields']['img'] + '/>')}
+            $('#place_name').html('<h3>'+ obj[1]['fields']['place'] + '</h3><p>'+ obj[0]['fields']['info_about_place']+'</p>')
+      
+           },
+         });
+}
+paris.getElement().onclick = function(){
+  sidebar.classList.toggle('active');
+
+  
+  $.ajax({
+          url: "{% url 'default' %}",
+          method: 'post',
+          beforeSend: function(xhr){xhr.setRequestHeader('X-CSRFToken', $("input[name='csrfmiddlewaretoken']").val());},
+          data: {
+            "place" : 'Paris'
+          },
+          success: function(response){
+            var obj = JSON.parse(response);
+            console.log(obj)
+            for(var i= 1;i<4;i++){
+            $('#im'+[i]).html('<img src=' + obj[i]['fields']['img'] + '/>')}
+            $('#place_name').html('<h3>'+ obj[1]['fields']['place'] + '</h3><p>'+ obj[0]['fields']['info_about_place']+'</p>')
+      
+           },
+         });
+}
+aus.getElement().onclick = function(){
+  sidebar.classList.toggle('active');
+
+  
+  $.ajax({
+          url: "{% url 'default' %}",
+          method: 'post',
+          beforeSend: function(xhr){xhr.setRequestHeader('X-CSRFToken', $("input[name='csrfmiddlewaretoken']").val());},
+          data: {
+            "place" : 'Australia'
+          },
+          success: function(response){
+            var obj = JSON.parse(response);
+            console.log(obj)
+            for(var i= 1;i<4;i++){
+            $('#im'+[i]).html('<img src=' + obj[i]['fields']['img'] + '/>')}
+            $('#place_name').html('<h3>'+ obj[1]['fields']['place'] + '</h3><p>'+ obj[0]['fields']['info_about_place']+'</p>')
+      
+           },
+         });
+}
+brazil.getElement().onclick = function(){
+  sidebar.classList.toggle('active');
+
+  
+  $.ajax({
+          url: "{% url 'default' %}",
+          method: 'post',
+          beforeSend: function(xhr){xhr.setRequestHeader('X-CSRFToken', $("input[name='csrfmiddlewaretoken']").val());},
+          data: {
+            "place" : 'Brazil'
+          },
+          success: function(response){
+            var obj = JSON.parse(response);
+            console.log(obj)
+            for(var i= 1;i<4;i++){
+            $('#im'+[i]).html('<img src=' + obj[i]['fields']['img'] + '/>')}
+            $('#place_name').html('<h3>'+ obj[1]['fields']['place'] + '</h3><p>'+ obj[0]['fields']['info_about_place']+'</p>')
+      
+           },
+         });
+}
+us.getElement().onclick = function(){
+  sidebar.classList.toggle('active');
+
+  
+  $.ajax({
+          url: "{% url 'default' %}",
+          method: 'post',
+          beforeSend: function(xhr){xhr.setRequestHeader('X-CSRFToken', $("input[name='csrfmiddlewaretoken']").val());},
+          data: {
+            "place" : 'USA'
+          },
+          success: function(response){
+            var obj = JSON.parse(response);
+            console.log(obj)
+            for(var i= 1;i<4;i++){
+            $('#im'+[i]).html('<img src=' + obj[i]['fields']['img'] + '/>')}
+            $('#place_name').html('<h3>'+ obj[1]['fields']['place'] + '</h3><p>'+ obj[0]['fields']['info_about_place']+'</p>')
+      
+           },
+         });
+}
+// slideshow
+
+var slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+  }
+
+  slides[slideIndex-1].style.display = "block";
+}
+
+
+
+
+
+  </script>
+
+
+</html>
+
+
+
