@@ -1,6 +1,6 @@
 # DJango-maps
 
-in this proj i used my first AJAX call! never worked with js Befor! happy to start here!
+in this proj i used my first AJAX call! never worked with JS befor! happy to start here!
 
 ```py
   $.ajax({
